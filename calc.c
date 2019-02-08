@@ -1,9 +1,9 @@
-/* directivas del preprocesador */
+// directivas del preprocesador 
 #include <stdio.h>
-#include <stdlib.h>
 #include <math.h>
+#include <stdlib.h>
 
-/* macros para el preprocesador */
+// macros para el preprocesador
 #define OK 0
 #define ERROR -1
 #define FALSE 0
@@ -12,35 +12,37 @@
 #define MAX_PILA 1000
 #define MAX_CADENA 100
 
-/* declaracion de variables */
+// declaracion de variables 
 int i;
 int cant_operandos;
 int superior = -1;
 int indi_posfi = -1;
 char pila[MAX_PILA];
 char posfijo[MAX_PILA];
-char cadena[MAX_CADENA];
-int prioridad_operadores[3][8] = {{94, 42, 47, 43, 45, 40, 91, 123}, /* codigo ascii de los operadores */
-                                  {4, 2, 2, 1, 1, 4, 4, 4},          /* prioridad de entrada */
-                                  {3, 2, 2, 1, 1, 0, 0, 0}};         /* prioridad en pila */
+int cadena[MAX_CADENA];
+int charcount;
+int prioridad_operadores[3][8] = {{94, 42, 47, 43, 45, 40, 91, 123},        // codigo ascii de los operadores
+                                  {4, 2, 2, 1, 1, 4, 4, 4},                 // prioridad de entrada
+                                  {3, 2, 2, 1, 1, 0, 0, 0}};                // prioridad en pila
 
 /* declaracion de funciones */
-int vacio(int *posicion);                                   /* declaro al funcion vacio */
-char extraer(char *temp, int *posicion);                    /* declaro la funcion exteaer para el tratamiento de pilas */
-int insertar(char caracter, char *temp, int *posicion);     /* declaro la funcion insertar para el tratamiento de pilas */
-int validar_caracteres(char cadena[], char *temp);          /* declaro la funcion para validar los caratereres de la formula */
-int vali_llave_corche_paren(char cadena[]);                 /* declaro la funcion para validar que el orden de los caracteres agrupadores sea correto */
-void infijo_posfijo(char cadena[]);                         /* declaro la fucnion para convertir de la expresion infijo a posfijo */
-int po(char caracter, int fil);                             /* declaro al función para extraer la precedencia de operador tanto en la entrada como en la pila */
-float calcular_posfijo();
+int vacio(int *posicion);                                   // declaro al funcion vacio
+char extraer(char *temp, int *posicion);                    // declaro la funcion exteaer para el tratamiento de pilas
+int insertar(char caracter, char *temp, int *posicion);     // declaro la funcion insertar para el tratamiento de pilas
+int validar_caracteres(int cadena[], int temp);             // declaro la funcion para validar los caratereres de la formula
+int vali_llave_corche_paren(int cadena[]);                  // declaro la funcion para validar que el orden de los caracteres agrupadores sea correto
+void infijo_posfijo(int cadena[]);                          // declaro la fucnion para convertir de la expresion infijo a posfijo
+int po(char caracter, int fil);                             // declaro al función para extraer la precedencia de operador tanto en la entrada como en la pila
+float calcular_posfijo();                                   // declaro la función para calcular el posfijo
+int posfijo_operando(int caracter);
 
-/* definicion de la funcion main */
+// definicion de la funcion main
 int main(int argc, char const *argv[]) {
-    char caracter_invalido;                 /* constante para almacenar el primer caracter invalido detectado en la formula */
+    int caracter_invalido;                      // constante para almacenar el primer caracter invalido detectado en la formula                       
+int option, clean;                              // declaro la variable para almacenar el valor de la opcion indicada por el usuario
     int c;
-    char option;                            /* declaro la variable para almacenar el valor de la opcion indicada por el usuario */
 
-    system("cls");                          /* limpio la consola */
+    system("clear");                              // limpio la consola en linux
     printf("Bienvenidos, este programa calcula una ecuacion generando como resultado el valor de los operadores sobre los operandos ingresados.\n");
     printf("Puede ingresar valores y los simbolos {}, [] y () para modificar la presedencia de los operadores.\n");
     printf("Puede utilizar los siguientes operadores: +, -, / y ^ \n");
@@ -49,24 +51,27 @@ int main(int argc, char const *argv[]) {
 
     do {
         printf("Menu de opciones: \n");
-        printf("1) Presione 1 para calcular y mostrar el resultado de la ecucion.\n");
+        printf("1) Presione 1 para calcular y mostrar el resultado de la ecuacion.\n");
         printf("2) Presione 2 para calcular y mostrar el posfijo y el resultado de la ecuacion.\n");
         printf("3) Precione 0 para salir del sistema.\n");
         printf ("Opcion: ");
 
-        //scanf("%c", &option);
+        option = getchar();
 
-        while ((option = getchar()) !=  EOF && c != '\n')
-
-        //printf("\n");
+        while ((clean = getchar()) !=  EOF && clean != '\n')            // limpiando el buffer
+            ;
 
         switch (option) {
             case '1':
                 printf("Ingrese la formula a calcular: ");
                 
-                gets(cadena);
-                
-                if (!validar_caracteres(cadena, &caracter_invalido)) {
+                for (i = 0; (c = getchar()) != EOF && c != '\n'; i++) {
+                    cadena[i] = c;
+                    charcount = i;
+                }
+                cadena[i+1] = '\0';
+
+                if (!validar_caracteres(cadena, caracter_invalido)) {
                     if (!vali_llave_corche_paren(cadena)) {
                         infijo_posfijo(cadena);
                         printf("El resultado de la ecuacion es: %.2f\n\n", calcular_posfijo());
@@ -81,8 +86,14 @@ int main(int argc, char const *argv[]) {
                 break;
             case '2':
                 printf("Ingrese la formula a calcular: ");
-                gets(cadena);
-                if (!validar_caracteres(cadena, &caracter_invalido)) {
+                
+                for (i = 0; (c = getchar()) != EOF && c != '\n'; i++) {
+                    cadena[i] = c;
+                    charcount = i;
+                }
+                cadena[i+1] = '\0';
+
+                if (!validar_caracteres(cadena, caracter_invalido)) {
                     if (!vali_llave_corche_paren(cadena)) {
                         infijo_posfijo(cadena);
                         printf("La expresion en notacion posfijo es: %s\n", posfijo);
@@ -104,23 +115,24 @@ int main(int argc, char const *argv[]) {
         }
     } while(option != '0');
 
-    system("pause");        /* pauso el flujo de la aplicacion */
-return 0;                   /* finalizo la ejecucion */
+    puts("Pulse enter para continuar");
+    getchar();                              // pauso el flujo de la aplicacion 
+return 0;                                   // finalizo la ejecucion
 }
 
-/* definicion de funciones */
-int vacio(int *posicion) {              /* funcion vacio */
+// definicion de funciones
+int vacio(int *posicion) {              // funcion vacio
     if (*posicion < 0)
         return TRUE;
 
     return FALSE;
 }
 
-char extraer(char *temp, int *posicion) {           /* funcion extraer caracter de la pila */
-return temp[(*posicion)--];                         /* extaer extrae un valor de la pila y disminuye el contador en 1 */
+char extraer(char *temp, int *posicion) {           // funcion extraer caracter de la pila 
+return temp[(*posicion)--];                         // extaer extrae un valor de la pila y disminuye el contador en 1
 }
 
-int insertar(char caracter, char *temp, int *posicion) {           /* funcion insertar caracter en la pila */
+int insertar(char caracter, char *temp, int *posicion) {           // funcion insertar caracter en la pila
     if ((*posicion + 1) >= MAX_PILA)
         return FULL;
 
@@ -128,7 +140,7 @@ int insertar(char caracter, char *temp, int *posicion) {           /* funcion in
     return OK;
 }
 
-int validar_caracteres(char cadena[], char *temp) {                 /* funcion para validar que los caracteres tipeados por el usuario sean validos */
+int validar_caracteres(int cadena[], int temp) {                    // funcion para validar que los caracteres tipeados por el usuario sean validos
     for (i = 0; cadena[i] != '\0'; i++) {
         switch (cadena[i]) {
             case '0':
@@ -156,14 +168,14 @@ int validar_caracteres(char cadena[], char *temp) {                 /* funcion p
             case '}':
                 break;
             default:
-                *temp = cadena[i];
+                temp = cadena[i];
                 return ERROR;
         }
     }
     return OK;
 }
 
-int vali_llave_corche_paren(char cadena[]) {          /* fucnion para validar que las llaves, cohorchetes y parentesis esten en el orden correcto */
+int vali_llave_corche_paren(int cadena[]) {          // fucnion para validar que las llaves, cohorchetes y parentesis esten en el orden correcto
     for (i = 0; cadena[i] != '\0'; i++) {
         switch (cadena[i]) {
             case '{':
@@ -195,7 +207,7 @@ int vali_llave_corche_paren(char cadena[]) {          /* fucnion para validar qu
     return ERROR;
 }
 
-void infijo_posfijo(char cadena[]) {             /*funcion para convertir una operacion en su forma infija a su forma sufija*/
+void infijo_posfijo(int cadena[]) {             // funcion para convertir una operacion en su forma infija a su forma sufija
     int flat_is_operan = 0;
     char temp;
     cant_operandos = 0;
@@ -273,9 +285,10 @@ float calcular_posfijo() {
     int indi_operan = -1;
     int indi_str_operando = -1;
     char str_operando[MAX_CADENA];
+    float result;
 
     for (i = 0; posfijo[i] != '\0'; i++) {
-        if (posfijo_operando(&posfijo[i])) {
+        if (posfijo_operando(posfijo[i]) == TRUE) {
             str_operando[++indi_str_operando] = posfijo[i];
             str_operando[(indi_str_operando + 1)] = '\0';
         }
@@ -288,7 +301,7 @@ float calcular_posfijo() {
                 num2 = operandos[indi_operan--];
                 num1 = operandos[indi_operan];
                 switch (posfijo[i]) {
-                    case '^':
+                    case '^': 
                         operandos[indi_operan] = pow(num1, num2);
                         break;
                     case '*':
@@ -315,8 +328,8 @@ float calcular_posfijo() {
     return operandos[indi_operan];
 }
 
-int posfijo_operando(char *caracter) {
-    switch (*caracter) {
+int posfijo_operando(int caracter) {
+    switch (caracter) {
         case '^':
         case '*':
         case '/':
