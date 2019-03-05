@@ -33,7 +33,7 @@ int validar_caracteres(int cadena[], int temp);             // declaro la funcio
 int vali_llave_corche_paren(int cadena[]);                  // declaro la funcion para validar que el orden de los caracteres agrupadores sea correto
 void infijo_posfijo(int cadena[]);                          // declaro la fucnion para convertir de la expresion infijo a posfijo
 int po(char caracter, int fil);                             // declaro al función para extraer la precedencia de operador tanto en la entrada como en la pila
-float calcular_posfijo();                                   // declaro la función para calcular el posfijo
+float calcular_posfijo(int cant);                                   // declaro la función para calcular el posfijo
 int posfijo_operando(int caracter);
 
 // definicion de la funcion main
@@ -74,7 +74,7 @@ int option, clean;                              // declaro la variable para alma
                 if (!validar_caracteres(cadena, caracter_invalido)) {
                     if (!vali_llave_corche_paren(cadena)) {
                         infijo_posfijo(cadena);
-                        printf("El resultado de la ecuacion es: %.2f\n\n", calcular_posfijo());
+                        printf("El resultado de la ecuacion es: %.2f\n\n", calcular_posfijo(cant_operandos));
                     }
                     else {
                         superior = -1;
@@ -97,7 +97,7 @@ int option, clean;                              // declaro la variable para alma
                     if (!vali_llave_corche_paren(cadena)) {
                         infijo_posfijo(cadena);
                         printf("La expresion en notacion posfijo es: %s\n", posfijo);
-                        printf("El resultado de la ecuacion es: %.2f\n\n", calcular_posfijo());
+                        printf("El resultado de la ecuacion es: %.2f\n\n", calcular_posfijo(cant_operandos));
                     }
                     else {
                         superior = -1;
@@ -279,9 +279,9 @@ int po(char caracter, int fil) {
     return -1;
 }
 
-float calcular_posfijo() {
+float calcular_posfijo(int cant) {
     double num1, num2;
-    double operandos[cant_operandos];
+    double operandos[cant];
     int indi_operan = -1;
     int indi_str_operando = -1;
     char str_operando[MAX_CADENA];
