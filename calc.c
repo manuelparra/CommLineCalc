@@ -38,11 +38,11 @@ int posfijo_operando(int caracter);
 
 // definicion de la funcion main
 int main(int argc, char const *argv[]) {
-    int caracter_invalido;                      // constante para almacenar el primer caracter invalido detectado en la formula                       
-int option, clean;                              // declaro la variable para almacenar el valor de la opcion indicada por el usuario
+    int caracter_invalido;                          // constante para almacenar el primer caracter invalido detectado en la formula                       
+    int option, clean;                              // declaro la variable para almacenar el valor de la opcion indicada por el usuario
     int c;
 
-    system("clear");                              // limpio la consola en linux
+    system("clear");                                // limpio la consola en linux
     printf("Bienvenidos, este programa calcula una ecuacion generando como resultado el valor de los operadores sobre los operandos ingresados.\n");
     printf("Puede ingresar valores y los simbolos {}, [] y () para modificar la presedencia de los operadores.\n");
     printf("Puede utilizar los siguientes operadores: +, -, / y ^ \n");
@@ -128,8 +128,8 @@ int vacio(int *posicion) {              // funcion vacio
     return FALSE;
 }
 
-char extraer(char *temp, int *posicion) {           // funcion extraer caracter de la pila 
-return temp[(*posicion)--];                         // extaer extrae un valor de la pila y disminuye el contador en 1
+char extraer(char *temp, int *posicion) {               // funcion extraer caracter de la pila 
+    return temp[(*posicion)--];                         // extaer extrae un valor de la pila y disminuye el contador en 1
 }
 
 int insertar(char caracter, char *temp, int *posicion) {           // funcion insertar caracter en la pila
